@@ -1,0 +1,5 @@
+.sublime
+.idea
+.vs
+node_modules
+build
