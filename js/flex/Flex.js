@@ -1,3 +1,5 @@
+import {Default} from './config.js'
+import {Utils} from './utils.js'
 import {Box} from './box.js'
 import {Style} from './style.js'
 
@@ -6,19 +8,15 @@ export class Flex {
         this.checkRoot(sel);
         if(!this.$root) return;
 
-        this.props = Object.assign(Flex.default, props);
+        this.props = Object.assign(new Object({...Default}), props);
         this._countRange = this.countRange = this.props.countRange;
-    }
-
-    static default = {
-        countRange: 2
     }
 
     init() {
         this.createEls();
         this.addEventRange();
         this.Box = new Box();
-        this.Style = new Style();
+        this.Style = new Style(this.$style, this.$css);
         this.addEventCheckbox();
 
         this.outputItems(this.countRange);
@@ -27,13 +25,13 @@ export class Flex {
     outputItems(num) {
         for (let i = 0; i < num; i++) {
             let item = this.Box.createItem();
-            this.$box.appendChild(item)
+            this.$box.appendChild(item);
         }
     }
 
     checkRoot(sel) {
-        this.$root = document.querySelector(sel) || null;
-        if (this.$root) this.$root.classList.add('flex');
+        this.$root = Utils.qs(sel) || null;
+        if (this.$root) this.$root.classList.add(Utils.getClass());
     }
 
     set countRange(num) {
@@ -48,7 +46,7 @@ export class Flex {
         let els = {
             input: {
                 attrs: {
-                    class: 'flex_input',
+                    class: Utils.getClass('range'),
                     type: 'range',
                     min: 1,
                     max: 7,
@@ -57,21 +55,21 @@ export class Flex {
                 },
                 var: 'range'
             },
-            diver: {
+            form: {
                 attrs: {
-                    class: 'flex_style'
+                    class: Utils.getClass('style')
                 },
                 var: 'style'
             },
             div: {
                 attrs: {
-                    class: 'flex_box'
+                    class: Utils.getClass('box')
                 },
                 var: 'box'
             },
             pre: {
                 attrs: {
-                    class: 'flex_css'
+                    class: Utils.getClass('css')
                 },
                 var: 'css'
             }
@@ -79,7 +77,7 @@ export class Flex {
 
         Object.entries(els).map(el => {
             let [tag, props] = el;
-            let $el = document.createElement(tag);
+            let $el = Utils.crtEl(tag);
             this[`$${props.var}`] = $el
             this.$root.append($el);
 

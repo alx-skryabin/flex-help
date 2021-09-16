@@ -1,31 +1,13 @@
+import {FlexProps} from './config.js'
+import {Utils} from './utils.js'
+
 export class Style {
-	constructor() {
+	constructor($root, $css) {
+		this.$root = $root;
+		this.$css = $css;
 		this.css = null;
 		this.init();
 	}
-
-	static props = [
-	{
-		name: 'flex-direction',
-		value: ['row', 'row-reverse', 'column', 'column-reverse']
-	},
-	{
-		name: 'flex-wrap',
-		value: ['nowrap', 'wrap', 'wrap-reverse']
-	},
-	{
-		name: 'justify-content',
-		value: ['flex-start', 'flex-end', 'center', 'space-around', 'space-between']
-	},
-	{
-		name: 'align-items',
-		value: ['stretch', 'baseline', 'center', 'flex-start', 'flex-end']
-	},
-	{
-		name: 'align-content',
-		value: ['stretch', 'center', 'flex-start', 'flex-end', 'space-around', 'space-between']
-	},
-	]
 
 	init() {
 		this.addEls();
@@ -34,9 +16,9 @@ export class Style {
 	}
 
 	getProps() {
-		return Style.props.reduce((all, item) => {
+		return FlexProps.reduce((all, item) => {
 			let {name, value} = item;
-			value = document.querySelector(`input[name="${name}"]:checked`).value;
+			value = this.$root.querySelector(`input[name="${name}"]:checked`).value;
 
 			return [...all, {name, value}];
 		}, []);
@@ -44,11 +26,10 @@ export class Style {
 
 	updateCss() {
 		let [drc, wr, jst, ai, ac] = this.getProps();
-		let $root = document.querySelector('.flex_css');
 
 		this.css = `flex-direction: ${drc.value}; flex-wrap: ${wr.value}; justify-content: ${jst.value}; align-items: ${ai.value}; align-content: ${ac.value};`;
 
-		$root.innerText = '{\n' + 
+		this.$css.innerText = '{\n' + 
 		'    display: flex;\n' +
 		'    flex-direction: ' + drc.value + ';\n' +
 		'    flex-wrap: ' + wr.value + ';\n' +
@@ -59,16 +40,13 @@ export class Style {
 	}
 
 	addEls() {
-		let $root = document.querySelector('.flex_style');
-		let listArr = this.createEls();
-
-		listArr.map(item => {
-			$root.appendChild(item);
-		})
+		this.createEls().map(item => {
+			this.$root.append(item);
+		});
 	}
 
 	createEls() {
-		return Style.props.reduce((els, item) => {
+		return FlexProps.reduce((els, item) => {
 			let {name, value} = item;
 
 			let $item = this.createItem();
@@ -77,48 +55,46 @@ export class Style {
 
 			value.map((prps, i) => {
 				let $label = this.createLabel(name, prps, i);
-				$check.appendChild($label);
+				$check.append($label);
 			});
 
-			$item.appendChild($head);
-			$item.appendChild($check);
+			$item.append($head, $check);
 
 			return [...els, $item];
 		}, []);
 	}
 
 	createItem() {
-		let $item = document.createElement('div');
-		$item.classList.add('flex_style-prop');
+		let $item = Utils.crtEl('div');
+		$item.classList.add(Utils.getClass('style-prop'));
 		return $item;
 	}
 
 	createHead(title) {
-		let $head = document.createElement('div');
-		$head.classList.add('flex_style-head');
+		let $head = Utils.crtEl('div');
+		$head.classList.add(Utils.getClass('style-head'));
 		$head.innerText = title;
 		return $head;
 	}
 
 	createCheck() {
-		let $check = document.createElement('div');
-		$check.classList.add('flex_style-check');
+		let $check = Utils.crtEl('div');
+		$check.classList.add(Utils.getClass('style-check'));
 		return $check;
 	}
 
 	createLabel(name, value, ind) {
-		let $label = document.createElement('label');
-		let $span = document.createElement('span');
+		let $label = Utils.crtEl('label');
+		let $span = Utils.crtEl('span');
 		$span.innerText = (ind === 0) ? `${value} (default)` : value;
 
-		let $input = document.createElement('input');
+		let $input = Utils.crtEl('input');
 		$input.setAttribute('name', name);
 		$input.setAttribute('value', value);
 		$input.setAttribute('type', 'radio');
 		if(ind === 0) $input.setAttribute('checked', 'checked');
 
-		$label.appendChild($input);
-		$label.appendChild($span);
+		$label.append($input, $span);
 
 		return $label;
 	}

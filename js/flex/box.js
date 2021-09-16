@@ -1,13 +1,14 @@
+import {Colors} from './config.js'
+import {Utils} from './utils.js'
+
 export class Box {
 	constructor() {
 		this.count = 0;
 	}
 
-	static colors = ['coral', 'teal', 'pink', 'orange', 'limegreen', 'skyblue', 'brown'];
-
 	createItem() {
-		let $box = document.createElement('div');
-		$box.classList.add('flex_box-item');
+		let $box = Utils.crtEl('div');
+		$box.classList.add(Utils.getClass('box-item'));
 		$box.style.background = this.color;
 		$box.innerText = this.count + 1;
 		this.count++;
@@ -15,9 +16,9 @@ export class Box {
 	}
 
 	get color() {
-		let num = (this.count >= Box.colors.length) 
-		? this.count % Box.colors.length
+		let num = (this.count >= Colors.length) 
+		? this.count % Colors.length
 		: this.count;
-		return Box.colors[num];
+		return Colors[num];
 	}
 }
