@@ -3,6 +3,7 @@ import {Utils} from './utils.js'
 import {Box} from './box.js'
 import {Style} from './style.js'
 import {Copy} from './copy.js'
+import {Media} from './media.js'
 
 export class Flex {
     constructor(sel, props = {}) {
@@ -15,7 +16,7 @@ export class Flex {
 
     init() {
         this.createEls();
-        
+
         this.Box = new Box();
         this.Style = new Style(this.$style, this.$css);
 
@@ -24,6 +25,7 @@ export class Flex {
         this.addEventClick();
 
         this.outputItems(this.countRange);
+        Media.add(this.$root);
     }
 
     outputItems(num) {

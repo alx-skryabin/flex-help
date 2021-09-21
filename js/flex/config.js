@@ -10,7 +10,7 @@ const Colors = [
 'coral', 'teal', 'pink', 
 'orange', 'limegreen', 
 'skyblue', 'brown'
-];
+]
 
 const FlexProps = [
 {
@@ -35,5 +35,11 @@ const FlexProps = [
 },
 ]
 
+const URL = {
+	github: 'https://github.com/alx-skryabin/flex-help',
+	insta: 'http://instagram.com/alx.skryabin',
+	vk: 'https://vk.com/alx.skryabin'
+}
 
-export {Default, System, Colors, FlexProps}
+
+export {Default, System, Colors, FlexProps, URL}
