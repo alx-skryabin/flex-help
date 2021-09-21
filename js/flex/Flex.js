@@ -2,6 +2,7 @@ import {Default} from './config.js'
 import {Utils} from './utils.js'
 import {Box} from './box.js'
 import {Style} from './style.js'
+import {Copy} from './copy.js'
 
 export class Flex {
     constructor(sel, props = {}) {
@@ -14,10 +15,13 @@ export class Flex {
 
     init() {
         this.createEls();
-        this.addEventRange();
+        
         this.Box = new Box();
         this.Style = new Style(this.$style, this.$css);
+
+        this.addEventRange();
         this.addEventCheckbox();
+        this.addEventClick();
 
         this.outputItems(this.countRange);
     }
@@ -43,8 +47,10 @@ export class Flex {
     }
 
     createEls() {
-        let els = {
-            input: {
+        let els = [
+            {
+                tag: 'input',
+                variable: 'range',
                 attrs: {
                     class: Utils.getClass('range'),
                     type: 'range',
@@ -52,36 +58,38 @@ export class Flex {
                     max: 7,
                     step: 1,
                     value: this.countRange
-                },
-                var: 'range'
+                }
             },
-            form: {
+            {
+                tag: 'form',
+                variable: 'style',
                 attrs: {
                     class: Utils.getClass('style')
-                },
-                var: 'style'
+                }
             },
-            div: {
+            {
+                tag: 'div',
+                variable: 'box',
                 attrs: {
                     class: Utils.getClass('box')
-                },
-                var: 'box'
+                }                
             },
-            pre: {
+            {
+                tag: 'div',
+                variable: 'css',
                 attrs: {
                     class: Utils.getClass('css')
-                },
-                var: 'css'
+                }
             }
-        };
+        ];
 
-        Object.entries(els).map(el => {
-            let [tag, props] = el;
+        els.map(el => {
+            let {tag, variable, attrs} = el;
             let $el = Utils.crtEl(tag);
-            this[`$${props.var}`] = $el
+            this[`$${variable}`] = $el;
             this.$root.append($el);
 
-            Object.entries(props.attrs).map(attr => {
+            Object.entries(attrs).map(attr => {
                 let [name, value] = attr;
                 $el.setAttribute(name, value);
             });
@@ -99,7 +107,17 @@ export class Flex {
     addEventCheckbox() {
         this.$style.onchange = () => {
             this.Style.updateCss();
-            this.$box.style.cssText = this.Style.css;
+            this.$box.style.cssText = this.Style.cssText;
         }
+    }
+
+    addEventClick() {
+        this.$root.addEventListener('click', e => {
+            let t = e.target;
+
+            if (t.dataset.copy) {
+                Copy.toBuffer(t);
+            }
+        });
     }
 }

@@ -47,15 +47,16 @@
 }
 
 .fh__flex_style-prop {
+	position: relative;
 	min-width: 180px;
 	margin-bottom: 20px;
 }
 
 .fh__flex_style-head {
+	padding-left: 25px;
 	margin-bottom: 20px;
 	text-transform: uppercase;
 	font-weight: 600;
-	letter-spacing: 1px;
 }
 
 .fh__flex_style-check {
@@ -112,6 +113,45 @@
 	border-radius: var(--radius);
 	box-shadow: var(--shadow);
 	z-index: var(--index);
+}
+
+.fh__flex_css-pre {
+	margin: 0;
+}
+
+.fh__flex_copy {
+	position: absolute;
+	text-align: center;
+	cursor: pointer;
+	background: gold;
+	color: #333;
+	transition: .2s;
+}
+
+.fh__flex_copy:hover {
+	opacity: .8;
+	transition: .2s;
+}
+
+.fh__flex_copy.active {
+	background: #47F386;
+}
+
+.fh__flex_copy-style {
+	width: 20px;
+	height: 20px;
+	font-size: .8em;
+	line-height: 20px;
+	border-radius: 5px;
+}
+
+.fh__flex_copy-css {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 12px;
+	top: 10px;
+	right: 10px;
 }
 
 

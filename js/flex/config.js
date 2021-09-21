@@ -1,6 +1,5 @@
 const Default = Object.freeze({
-	countRange: 2,
-	test: 'demo'
+	countRange: 2
 })
 
 const System = {

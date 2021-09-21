@@ -5,14 +5,14 @@ export class Style {
 	constructor($root, $css) {
 		this.$root = $root;
 		this.$css = $css;
-		this.css = null;
+		this.$pre = null;
+		this.cssText = null;
 		this.init();
 	}
 
 	init() {
 		this.addEls();
 		this.updateCss();
-		
 	}
 
 	getProps() {
@@ -27,9 +27,9 @@ export class Style {
 	updateCss() {
 		let [drc, wr, jst, ai, ac] = this.getProps();
 
-		this.css = `flex-direction: ${drc.value}; flex-wrap: ${wr.value}; justify-content: ${jst.value}; align-items: ${ai.value}; align-content: ${ac.value};`;
+		this.cssText = `flex-direction: ${drc.value}; flex-wrap: ${wr.value}; justify-content: ${jst.value}; align-items: ${ai.value}; align-content: ${ac.value};`;
 
-		this.$css.innerText = '{\n' + 
+		this.$pre.innerText = '{\n' + 
 		'    display: flex;\n' +
 		'    flex-direction: ' + drc.value + ';\n' +
 		'    flex-wrap: ' + wr.value + ';\n' +
@@ -43,59 +43,81 @@ export class Style {
 		this.createEls().map(item => {
 			this.$root.append(item);
 		});
+
+		this.$pre = createPreCss();
+		let $copy = createCopyStyle('css');
+		this.$css.append(this.$pre, $copy);
 	}
 
 	createEls() {
 		return FlexProps.reduce((els, item) => {
 			let {name, value} = item;
 
-			let $item = this.createItem();
-			let $head = this.createHead(name);
-			let $check = this.createCheck();
+			let $item = createItem();
+			let $head = createHead(name);
+			let $check = createCheck();
+			let $copy = createCopyStyle('style');
 
 			value.map((prps, i) => {
-				let $label = this.createLabel(name, prps, i);
+				let $label = createLabel(name, prps, i);
 				$check.append($label);
 			});
 
-			$item.append($head, $check);
+			$item.append($copy, $head, $check);
 
 			return [...els, $item];
 		}, []);
 	}
+}
 
-	createItem() {
-		let $item = Utils.crtEl('div');
-		$item.classList.add(Utils.getClass('style-prop'));
-		return $item;
-	}
 
-	createHead(title) {
-		let $head = Utils.crtEl('div');
-		$head.classList.add(Utils.getClass('style-head'));
-		$head.innerText = title;
-		return $head;
-	}
 
-	createCheck() {
-		let $check = Utils.crtEl('div');
-		$check.classList.add(Utils.getClass('style-check'));
-		return $check;
-	}
+function createItem() {
+	let $item = Utils.crtEl('div');
+	$item.classList.add(Utils.getClass('style-prop'));
+	return $item;
+}
 
-	createLabel(name, value, ind) {
-		let $label = Utils.crtEl('label');
-		let $span = Utils.crtEl('span');
-		$span.innerText = (ind === 0) ? `${value} (default)` : value;
+function createHead(title) {
+	let $head = Utils.crtEl('div');
+	$head.classList.add(Utils.getClass('style-head'));
+	$head.innerText = title;
+	return $head;
+}
 
-		let $input = Utils.crtEl('input');
-		$input.setAttribute('name', name);
-		$input.setAttribute('value', value);
-		$input.setAttribute('type', 'radio');
-		if(ind === 0) $input.setAttribute('checked', 'checked');
+function createCheck() {
+	let $check = Utils.crtEl('div');
+	$check.classList.add(Utils.getClass('style-check'));
+	return $check;
+}
 
-		$label.append($input, $span);
+function createLabel(name, value, ind) {
+	let $label = Utils.crtEl('label');
+	let $span = Utils.crtEl('span');
+	$span.innerText = (ind === 0) ? `${value} (default)` : value;
 
-		return $label;
-	}
+	let $input = Utils.crtEl('input');
+	$input.setAttribute('name', name);
+	$input.setAttribute('value', value);
+	$input.setAttribute('type', 'radio');
+	if(ind === 0) $input.setAttribute('checked', 'checked');
+
+	$label.append($input, $span);
+
+	return $label;
+}
+
+function createCopyStyle(name) {
+	let $copy = Utils.crtEl('div');
+	$copy.classList.add(Utils.getClass('copy'));
+	$copy.classList.add(Utils.getClass(`copy-${name}`));
+	$copy.setAttribute('data-copy', name);
+	$copy.innerText = '✂';
+	return $copy;
+}
+
+function createPreCss() {
+	let $pre = Utils.crtEl('pre');
+	$pre.classList.add(Utils.getClass('css-pre'));
+	return $pre;
 }
