@@ -29,14 +29,13 @@ export class Style {
 
 		this.cssText = `flex-direction: ${drc.value}; flex-wrap: ${wr.value}; justify-content: ${jst.value}; align-items: ${ai.value}; align-content: ${ac.value};`;
 
-		this.$pre.innerText = '{\n' + 
-		'    display: flex;\n' +
+		this.$pre.innerText = '    display: flex;\n' +
 		'    flex-direction: ' + drc.value + ';\n' +
 		'    flex-wrap: ' + wr.value + ';\n' +
 		'    justify-content: ' + jst.value + ';\n' +
 		'    align-items: ' + ai.value + ';\n' +
-		'    align-content: ' + ac.value + ';\n' +
-		'}';
+		'    align-content: ' + ac.value + ';';
+		
 	}
 
 	addEls() {
