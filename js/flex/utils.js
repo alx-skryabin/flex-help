@@ -13,4 +13,8 @@ export class Utils {
 	static qs(sel) {
 		return document.querySelector(sel);
 	}
+
+	static isNum(num) {
+		return typeof num === 'number' && !isNaN(num);
+	}
 }

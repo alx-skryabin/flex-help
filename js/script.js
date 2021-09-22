@@ -1,8 +1,10 @@
 import {Flex} from './flex/Flex.js'
 
+/*See all the parameters in the readme.md*/
 new Flex('#baz', {
     countRange: 4
-}).init();
+});
 
 
-// new Flex('#demo').init();
+/*Basic Initialisation*/
+// new Flex('#demo');

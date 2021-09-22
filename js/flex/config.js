@@ -1,5 +1,7 @@
 const Default = Object.freeze({
-	countRange: 2
+	countRange: 3,
+	countMax: 7,
+	countStep: 1
 })
 
 const System = {

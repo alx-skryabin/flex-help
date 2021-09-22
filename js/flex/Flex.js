@@ -7,11 +7,10 @@ import {Media} from './media.js'
 
 export class Flex {
     constructor(sel, props = {}) {
-        this.checkRoot(sel);
-        if(!this.$root) return;
+        this.$root = this.checkRoot(sel);
+        this.props = validProps(props);
 
-        this.props = Object.assign(new Object({...Default}), props);
-        this._countRange = this.countRange = this.props.countRange;
+        this.init();
     }
 
     init() {
@@ -24,7 +23,7 @@ export class Flex {
         this.addEventCheckbox();
         this.addEventClick();
 
-        this.outputItems(this.countRange);
+        this.outputItems(this.props.countRange);
         Media.add(this.$root);
     }
 
@@ -36,53 +35,49 @@ export class Flex {
     }
 
     checkRoot(sel) {
-        this.$root = Utils.qs(sel) || null;
-        if (this.$root) this.$root.classList.add(Utils.getClass());
-    }
-
-    set countRange(num) {
-        this._countRange = num;
-    }
-
-    get countRange() {
-        return this._countRange;
+        let $root = Utils.qs(sel) || null;
+        if ($root) {
+            $root.classList.add(Utils.getClass());
+            return $root;
+        }
+        else throw 'Not found selector on page!';
     }
 
     createEls() {
         let els = [
-            {
-                tag: 'input',
-                variable: 'range',
-                attrs: {
-                    class: Utils.getClass('range'),
-                    type: 'range',
-                    min: 1,
-                    max: 7,
-                    step: 1,
-                    value: this.countRange
-                }
-            },
-            {
-                tag: 'form',
-                variable: 'style',
-                attrs: {
-                    class: Utils.getClass('style')
-                }
-            },
-            {
-                tag: 'div',
-                variable: 'box',
-                attrs: {
-                    class: Utils.getClass('box')
-                }                
-            },
-            {
-                tag: 'div',
-                variable: 'css',
-                attrs: {
-                    class: Utils.getClass('css')
-                }
+        {
+            tag: 'input',
+            variable: 'range',
+            attrs: {
+                class: Utils.getClass('range'),
+                type: 'range',
+                min: 1,
+                max: this.props.countMax,
+                step: this.props.countStep,
+                value: this.props.countRange
             }
+        },
+        {
+            tag: 'form',
+            variable: 'style',
+            attrs: {
+                class: Utils.getClass('style')
+            }
+        },
+        {
+            tag: 'div',
+            variable: 'box',
+            attrs: {
+                class: Utils.getClass('box')
+            }                
+        },
+        {
+            tag: 'div',
+            variable: 'css',
+            attrs: {
+                class: Utils.getClass('css')
+            }
+        }
         ];
 
         els.map(el => {
@@ -122,4 +117,15 @@ export class Flex {
             }
         });
     }
+}
+
+
+function validProps(props) {
+    props = Object.entries(props).reduce((obj, prop) => {
+        let [name, val] = prop;
+        val = Utils.isNum(val) ? val : Default[name];
+        return {...obj, [name]: val};
+    }, {});
+
+    return Object.assign(new Object({...Default}), props);
 }
