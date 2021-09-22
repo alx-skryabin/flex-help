@@ -5,6 +5,7 @@ new Flex('#baz', {
     countRange: 4
 });
 
-
 /*Basic Initialisation*/
 // new Flex('#demo');
+
+console.warn('@Alx.Skryabin');

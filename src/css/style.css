@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Play&display=swap');
 
-* {
+.fh__flex * {
 	scrollbar-color: #ccc #fff;
 	scrollbar-width: thin;
 	font-family: 'Play', sans-serif;
